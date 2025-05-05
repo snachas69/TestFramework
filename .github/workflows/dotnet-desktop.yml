@@ -39,30 +39,86 @@
 name: .NET Core Desktop
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Select browser for UI tests'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - edge
 
 jobs:
-
-  build:
-
-    #strategy:
-     # matrix:
-       # configuration: [Debug, Release]
-
-    runs-on: ubuntu-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-
+  api_tests:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # Install the .NET Core workload
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore
+
+      - name: Run API tests
+        run: dotnet test --no-build --filter "Category=API" --logger "trx;LogFileName=api_tests.trx"
+
+      - name: Upload API test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-results
+          path: '**/TestResults/api_tests.trx'
+        continue-on-error: true
+        
+  ui_tests:
+    runs-on: ubuntu-latest
+    needs: api_tests
+    continue-on-error: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore
+
+      - name: Install browser dependencies
+        run: |
+          sudo apt-get update
+          if [ "${{ github.event.inputs.browser }}" == "firefox" ]; then
+            sudo apt-get install -y firefox
+          elif [ "${{ github.event.inputs.browser }}" == "edge" ]; then
+            echo "Edge installation steps here"
+          else
+            sudo apt-get install -y chromium-browser
+          fi
+
+      - name: Run UI tests
+        run: dotnet test --no-build --filter "Category=UI" --logger "trx;LogFileName=ui_tests.trx"
+
+      - name: Upload UI test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-test-results
+          path: '**/TestResults/ui_tests.trx'
