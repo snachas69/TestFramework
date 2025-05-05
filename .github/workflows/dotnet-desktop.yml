@@ -78,7 +78,7 @@ jobs:
         run: dotnet test --no-build --filter "Category=API" --logger "trx;LogFileName=api_tests.trx"
 
       - name: Upload API test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: api-test-results
           path: '**/TestResults/api_tests.trx'
@@ -90,7 +90,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -118,7 +118,7 @@ jobs:
         run: dotnet test --no-build --filter "Category=UI" --logger "trx;LogFileName=ui_tests.trx"
 
       - name: Upload UI test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ui-test-results
           path: '**/TestResults/ui_tests.trx'
