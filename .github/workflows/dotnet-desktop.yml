@@ -58,7 +58,7 @@ on:
 
 jobs:
   api_tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -85,7 +85,7 @@ jobs:
         continue-on-error: true
         
   ui_tests:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: api_tests
     continue-on-error: true
     steps:
