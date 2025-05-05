@@ -123,6 +123,13 @@ jobs:
             choco install -y googlechrome --ignore-checksums
           }
 
+      - name: Update appsettings.json with selected browser
+        shell: pwsh
+        run: |
+          $browser = "${{ github.event.inputs.browser }}"
+          $path = "YourTestProject/appsettings.json"  # Replace with actual path
+          (Get-Content $path -Raw) -replace '"Browser"\s*:\s*".*?"', '"Browser": "' + $browser + '"' | Set-Content $path
+
       - name: Run UI tests
         run: dotnet test --no-build --filter "Category=UI" --logger "trx;LogFileName=ui_tests.trx"
 
