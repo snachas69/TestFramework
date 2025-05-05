@@ -103,16 +103,25 @@ jobs:
       - name: Build solution
         run: dotnet build --no-restore
 
-      - name: Install browser dependencies
+      - name: Install selected browser
+        shell: pwsh
         run: |
-          sudo apt-get update
-          if [ "${{ github.event.inputs.browser }}" == "firefox" ]; then
-            sudo apt-get install -y firefox
-          elif [ "${{ github.event.inputs.browser }}" == "edge" ]; then
-            echo "Edge installation steps here"
-          else
-            sudo apt-get install -y chromium-browser
-          fi
+          $browser = "${{ github.event.inputs.browser }}"
+          "Selected browser: $browser"
+      
+          Set-ExecutionPolicy Bypass -Scope Process -Force
+      
+          if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+            Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+          }
+      
+          if ($browser -eq "firefox") {
+            choco install -y firefox
+          } elseif ($browser -eq "edge") {
+            choco install -y microsoft-edge
+          } else {
+            choco install -y googlechrome
+          }
 
       - name: Run UI tests
         run: dotnet test --no-build --filter "Category=UI" --logger "trx;LogFileName=ui_tests.trx"
