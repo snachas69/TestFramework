@@ -120,7 +120,7 @@ jobs:
           } elseif ($browser -eq "edge") {
             choco install -y microsoft-edge
           } else {
-            choco install -y googlechrome
+            choco install -y googlechrome --ignore-checksums
           }
 
       - name: Run UI tests
