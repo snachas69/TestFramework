@@ -3,7 +3,7 @@ using Tests.Pages;
 
 namespace TestProject1.Tests
 {
-    [TestFixture, Category("Web")]
+    [TestFixture, Category("UI")]
     public class WebClientTests : TestBaseUI
     {
         private SearchPage _searchPage;
