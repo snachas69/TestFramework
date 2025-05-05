@@ -127,9 +127,16 @@ jobs:
         shell: pwsh
         run: |
           $browser = "${{ github.event.inputs.browser }}"
-          $path = "YourTestProject/appsettings.json"  # Replace with actual path
-          (Get-Content $path -Raw) -replace '"Browser"\s*:\s*".*?"', '"Browser": "' + $browser + '"' | Set-Content $path
-
+          $path = "TestFramework/YourTestProject/appsettings.json"  # Replace with actual path
+          Write-Host "Updating appsettings.json at: $path"
+          
+          if (Test-Path $path) {
+            (Get-Content $path -Raw) -replace '"Browser"\s*:\s*".*?"', '"Browser": "' + $browser + '"' | Set-Content $path
+          } else {
+            Write-Host "Error: appsettings.json not found at $path"
+            exit 1
+          }
+          
       - name: Run UI tests
         run: dotnet test --no-build --filter "Category=UI" --logger "trx;LogFileName=ui_tests.trx"
 
