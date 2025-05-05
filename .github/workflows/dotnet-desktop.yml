@@ -127,7 +127,7 @@ jobs:
         shell: pwsh
         run: |
           $browser = "${{ github.event.inputs.browser }}"
-          $path = "TestFramework/YourTestProject/appsettings.json"  # Replace with actual path
+          $path = "TestProject1\TestProject1\appsettings.json"  # Replace with actual path
           Write-Host "Updating appsettings.json at: $path"
           
           if (Test-Path $path) {
