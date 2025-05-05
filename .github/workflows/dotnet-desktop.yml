@@ -127,13 +127,17 @@ jobs:
         shell: pwsh
         run: |
           $browser = "${{ github.event.inputs.browser }}"
-          $path = "TestFramework/TestProject1/appsettings.json"  # Replace with actual path
+          $path = "Tests/TestProject1/appsettings.json"  # ← replace this with the real path
+      
           Write-Host "Updating appsettings.json at: $path"
-          
+      
           if (Test-Path $path) {
-            (Get-Content $path -Raw) -replace '"Browser"\s*:\s*".*?"', '"Browser": "' + $browser + '"' | Set-Content $path
+            $json = Get-Content $path -Raw | ConvertFrom-Json
+            $json.Browser = $browser
+            $json | ConvertTo-Json -Depth 2 | Set-Content $path -Encoding UTF8
+            Write-Host "appsettings.json successfully updated to use browser: $browser"
           } else {
-            Write-Host "Error: appsettings.json not found at $path"
+            Write-Error "Error: appsettings.json not found at $path"
             exit 1
           }
           
