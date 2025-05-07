@@ -18,7 +18,7 @@ namespace TestProject1.Core.Drivers
                 case "chrome":
                     var chromeOptions = new ChromeOptions();
 
-                    chromeOptions.AddArgument("--headless=new");
+                    chromeOptions.AddArgument("--headless");
                     chromeOptions.AddArgument("--disable-gpu");
                     chromeOptions.AddArgument("--window-size=1920,1080");
                     chromeOptions.AddArgument("--no-sandbox");
