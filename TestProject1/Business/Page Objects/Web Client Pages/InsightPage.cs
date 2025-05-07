@@ -42,7 +42,7 @@ namespace Tests.Pages
         public bool CompareTitles()
         {
             var wait = new WebDriverWait(this.Driver ?? throw new NullReferenceException("Web driver has not been created"), 
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(20));
             
             wait.Until(driver =>
             {

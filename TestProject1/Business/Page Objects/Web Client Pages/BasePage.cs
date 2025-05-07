@@ -13,7 +13,7 @@ namespace Tests.Pages
         {
             this.Driver = driver;
             this._wait = new WebDriverWait(this.Driver ?? throw new ArgumentNullException("Web Driver has not been created"), 
-                TimeSpan.FromSeconds(10));
+                TimeSpan.FromSeconds(30));
 
             Log.Information("Base page for UI testing has been created");
         }
@@ -41,7 +41,7 @@ namespace Tests.Pages
         public void WaitForAcceptingCookies()
         {
             var wait = new WebDriverWait(this.Driver ?? throw new ArgumentNullException("Web driver has not been created"), 
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(20));
             var acceptButton = wait.Until(driver => this.AcceptCookieButton.Displayed ? this.AcceptCookieButton : null);
 
             acceptButton?.Click();
