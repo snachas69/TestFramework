@@ -8,6 +8,7 @@ namespace Tests.Pages
     {
         public SearchPage(IWebDriver? driver) : base(driver)
         {
+            Log.Information("Search page has been created");
         }
 
         // Locators

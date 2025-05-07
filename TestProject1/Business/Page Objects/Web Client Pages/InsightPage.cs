@@ -8,6 +8,7 @@ namespace Tests.Pages
     {
         public InsightPage(IWebDriver? driver) : base(driver)
         {
+            Log.Information("Insight page has been created");
         }
 
         //Locators

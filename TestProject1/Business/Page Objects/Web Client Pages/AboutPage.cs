@@ -7,6 +7,7 @@ namespace Tests.Pages
     {
         public AboutPage(IWebDriver? driver) : base(driver)
         {
+            Log.Information("About page has been created");
         }
 
         //Locators

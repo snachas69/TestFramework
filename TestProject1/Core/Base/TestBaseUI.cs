@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
+using Serilog;
 using TestProject1.Core.Drivers;
 
 namespace TestProject1.Core.Base
@@ -17,6 +18,8 @@ namespace TestProject1.Core.Base
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
+
+            Log.Information("Configuration variable has been set successfully");
 
             WebDriverSingleton.BrowserType = config["Browser"] ?? "Chrome";
 

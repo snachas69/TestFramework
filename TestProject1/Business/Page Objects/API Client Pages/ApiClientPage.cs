@@ -12,6 +12,8 @@ namespace TestProject1.Business.PageObjects.ApiClientPages
         public ApiClientPage(RestClient? client)
         {
             this.Client = client;
+
+            Log.Information("API client page has been created");
         }
 
         //Private methods

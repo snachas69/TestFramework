@@ -2,6 +2,7 @@
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using Serilog;
 
 namespace TestProject1.Core.Drivers
 {
@@ -24,7 +25,11 @@ namespace TestProject1.Core.Drivers
                         chromeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
                     }
 
-                    return new ChromeDriver(chromeOptions);
+                    var chromeDriver = new ChromeDriver(chromeOptions);
+
+                    Log.Information("Web driver has been created");
+
+                    return chromeDriver;
 
                 case "firefox":
                     var profile = new FirefoxProfile();
@@ -43,8 +48,11 @@ namespace TestProject1.Core.Drivers
                         Profile = profile
                     };
 
+                    var firefoxDriver = new FirefoxDriver(firefoxOptions);
 
-                    return new FirefoxDriver(firefoxOptions);
+                    Log.Information("Firefox web driver has been created");
+
+                    return firefoxDriver;
                 case "edge":
                     var edgeOptions = new EdgeOptions();
 
@@ -54,8 +62,11 @@ namespace TestProject1.Core.Drivers
                         edgeOptions.AddUserProfilePreference("download.prompt_for_download", false);
                         edgeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
                     }
+                    var edgeDriver = new EdgeDriver(edgeOptions);
 
-                    return new EdgeDriver(edgeOptions);
+                    Log.Information("Edge web driver has been created");
+
+                    return edgeDriver;
                 default:
                     throw new ArgumentException($"Unsupported browser: {browserType}");
             }

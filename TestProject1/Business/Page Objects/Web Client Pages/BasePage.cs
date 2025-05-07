@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Serilog;
 
 namespace Tests.Pages
 {
@@ -13,6 +14,8 @@ namespace Tests.Pages
             this.Driver = driver;
             this._wait = new WebDriverWait(this.Driver ?? throw new ArgumentNullException("Web Driver has not been created"), 
                 TimeSpan.FromSeconds(10));
+
+            Log.Information("Base page for UI testing has been created");
         }
 
         internal IWebElement AcceptCookieButton => FindElementById("onetrust-accept-btn-handler");
