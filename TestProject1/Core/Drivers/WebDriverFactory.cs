@@ -18,6 +18,12 @@ namespace TestProject1.Core.Drivers
                 case "chrome":
                     var chromeOptions = new ChromeOptions();
 
+                    chromeOptions.AddArgument("--headless=new");
+                    chromeOptions.AddArgument("--disable-gpu");
+                    chromeOptions.AddArgument("--window-size=1920,1080");
+                    chromeOptions.AddArgument("--no-sandbox");
+                    chromeOptions.AddArgument("--disable-dev-shm-usage");
+
                     if (!string.IsNullOrEmpty(downloadsPath))
                     {
                         chromeOptions.AddUserProfilePreference("download.default_directory", downloadsPath);
@@ -40,7 +46,6 @@ namespace TestProject1.Core.Drivers
                         profile.SetPreference("browser.download.dir", downloadsPath);
                         profile.SetPreference("browser.helperApps.neverAsk.saveToDisk", "application/pdf");
                         profile.SetPreference("pdfjs.disabled", true);
-                    
                     }
 
                     var firefoxOptions = new FirefoxOptions
@@ -48,13 +53,24 @@ namespace TestProject1.Core.Drivers
                         Profile = profile
                     };
 
+                    firefoxOptions.AddArgument("--headless");
+                    firefoxOptions.AddArgument("--width=1920");
+                    firefoxOptions.AddArgument("--height=1080");
+
                     var firefoxDriver = new FirefoxDriver(firefoxOptions);
 
                     Log.Information("Firefox web driver has been created");
 
                     return firefoxDriver;
+
                 case "edge":
                     var edgeOptions = new EdgeOptions();
+
+                    edgeOptions.AddArgument("headless");
+                    edgeOptions.AddArgument("disable-gpu");
+                    edgeOptions.AddArgument("window-size=1920,1080");
+                    edgeOptions.AddArgument("no-sandbox");
+                    edgeOptions.AddArgument("disable-dev-shm-usage");
 
                     if (!string.IsNullOrEmpty(downloadsPath))
                     {
@@ -67,6 +83,7 @@ namespace TestProject1.Core.Drivers
                     Log.Information("Edge web driver has been created");
 
                     return edgeDriver;
+
                 default:
                     throw new ArgumentException($"Unsupported browser: {browserType}");
             }
