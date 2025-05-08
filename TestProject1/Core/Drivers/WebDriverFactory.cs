@@ -18,11 +18,16 @@ namespace TestProject1.Core.Drivers
                 case "chrome":
                     var chromeOptions = new ChromeOptions();
 
-                    chromeOptions.AddArgument("--headless");
-                    chromeOptions.AddArgument("--disable-gpu");
-                    chromeOptions.AddArgument("--window-size=1920,1080");
-                    chromeOptions.AddArgument("--no-sandbox");
-                    chromeOptions.AddArgument("--disable-dev-shm-usage");
+                    chromeOptions.AddArguments("--no-sandbox");
+                    chromeOptions.AddArguments("--headless");
+                    chromeOptions.AddArguments("--disable-dev-shm-usage");
+                    chromeOptions.AddArguments("--incognito");
+                    chromeOptions.AddArguments("--disable-cache");
+                    chromeOptions.AddArguments("--disk-cache-size=0");
+                    chromeOptions.AddArguments("--disable-gpu");
+                    chromeOptions.AddArguments("--ignore-certificate-errors");
+                    chromeOptions.AddArguments("--window-size=1920,1080");
+                    chromeOptions.AddExcludedArgument("enable-automation");
 
                     if (!string.IsNullOrEmpty(downloadsPath))
                     {
@@ -33,7 +38,7 @@ namespace TestProject1.Core.Drivers
 
                     var chromeDriver = new ChromeDriver(chromeOptions);
 
-                    Log.Information("Web driver has been created");
+                    Log.Information("Chrome web driver has been created");
 
                     return chromeDriver;
 
