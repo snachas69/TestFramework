@@ -28,6 +28,7 @@ namespace TestProject1.Core.Drivers
                     chromeOptions.AddArguments("--ignore-certificate-errors");
                     chromeOptions.AddArguments("--window-size=1920,1080");
                     chromeOptions.AddExcludedArgument("enable-automation");
+                    chromeOptions.AddArgument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36");
 
                     if (!string.IsNullOrEmpty(downloadsPath))
                     {
@@ -39,6 +40,10 @@ namespace TestProject1.Core.Drivers
                     var chromeDriver = new ChromeDriver(chromeOptions);
 
                     Log.Information("Chrome web driver has been created");
+
+                    ((IJavaScriptExecutor)chromeDriver).ExecuteScript("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})");
+
+                    Log.Information("Flags were removed");
 
                     return chromeDriver;
 
