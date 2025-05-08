@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using Serilog;
 using TestProject1.Core.Drivers;
@@ -35,9 +36,39 @@ namespace TestProject1.Core.Base
         }
 
         [OneTimeTearDown]
-        public void TearDown()
+        public void OneTimeTearDown()
         {
             WebDriverSingleton.Dispose();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            var outcome = TestContext.CurrentContext.Result.Outcome.Status;
+
+            if (outcome == TestStatus.Failed)
+            {
+                CaptureScreenshot(TestContext.CurrentContext.Test.Name);
+            }
+        }
+
+        private void CaptureScreenshot(string testName)
+        {
+            try
+            {
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var screenshotsDir = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestResults", "Screenshots");
+                Directory.CreateDirectory(screenshotsDir);
+
+                var filePath = Path.Combine(screenshotsDir, $"{testName}_{timestamp}.png");
+                ((ITakesScreenshot)Driver).GetScreenshot().SaveAsFile(filePath);
+
+                TestContext.AddTestAttachment(filePath, "Screenshot on Failure");
+            }
+            catch (Exception ex)
+            {
+                TestContext.WriteLine($"Failed to save screenshot: {ex.Message}");
+            }
         }
     }
 }
