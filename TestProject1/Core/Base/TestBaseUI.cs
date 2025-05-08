@@ -57,11 +57,14 @@ namespace TestProject1.Core.Base
             try
             {
                 var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var sanitizedTestName = string.Concat(testName.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c));
                 var screenshotsDir = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestResults", "Screenshots");
                 Directory.CreateDirectory(screenshotsDir);
 
-                var filePath = Path.Combine(screenshotsDir, $"{testName}_{timestamp}.png");
-                ((ITakesScreenshot)Driver).GetScreenshot().SaveAsFile(filePath);
+                var filePath = Path.Combine(screenshotsDir, $"{sanitizedTestName}_{timestamp}.png");
+
+                Screenshot screenshot = ((ITakesScreenshot)this.Driver)?.GetScreenshot();
+                screenshot?.SaveAsFile(filePath);
 
                 TestContext.AddTestAttachment(filePath, "Screenshot on Failure");
             }
@@ -70,5 +73,6 @@ namespace TestProject1.Core.Base
                 TestContext.WriteLine($"Failed to save screenshot: {ex.Message}");
             }
         }
+
     }
 }
