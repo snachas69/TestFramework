@@ -47,7 +47,7 @@ jobs:
         continue-on-error: true
         
   ui_tests:
-    runs-on: [self-hosted, windows]
+    runs-on: windows-latest
     needs: api_tests
     continue-on-error: true
     steps:
@@ -66,7 +66,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Install selected browser
-        shell: powershell
+        shell: pwsh
         run: |
           $browser = "${{ github.event.inputs.browser }}"
           "Selected browser: $browser"
