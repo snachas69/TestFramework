@@ -19,7 +19,7 @@ namespace Tests.Pages
 
         internal IWebElement SlideTitle => base.FindElementByXPath("//div[contains(@class, 'active')]//div[@class='single-slide-ui']//p");
 
-        internal IWebElement ArticleTitle => base.FindElementByXPath("//div[contains(@class, 'section__wrapper')]/div[contains(@class, 'column-control')]//div[@class='text']/div/p");
+        internal IWebElement ArticleTitle => base.FindElementByXPath("//div[@class='header_and_download']//span");
 
         //Public Methods
 
@@ -27,7 +27,7 @@ namespace Tests.Pages
 
         public void SwipeCarouselTimes(int times)
         {
-            this.ExecuteScrolling(this.NextCarouselButton);
+            base.ExecuteScrolling(this.NextCarouselButton);
 
             for (int i = 0; i < times; i++)
             {
@@ -66,6 +66,11 @@ namespace Tests.Pages
         public void ValidateTitleOfArticleMatchesTitleOfCarousel()
         {
             //Act
+            if (!AreCookiesAccepted)
+            {
+                base.WaitForAcceptingCookies();
+            }
+
             this.SwipeCarouselTimes(2);
 
             bool result = this.CompareTitles();

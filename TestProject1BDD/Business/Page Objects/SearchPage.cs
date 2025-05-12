@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Tests.Pages
 {
@@ -60,15 +61,31 @@ namespace Tests.Pages
 
         public void EnterTextInSearchForm(string text)
         {
+            var wait = new WebDriverWait(base.Driver ?? throw new NullReferenceException("Web driver has not been created"),
+                TimeSpan.FromSeconds(30));
+
+            wait.Until(driver =>
+            {
+                try
+                {
+                    return this.SearchForm.Displayed && this.SearchForm.Enabled;
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return false;
+                }
+            });
+
             this.SearchForm.SendKeys(text);
 
             this.SearchButton.Click();
         }
+
         //Validating methods
+
         public void ValidateProgramingLanguageIsOnPage(string language)
         {
             //Act
-
             base.ExecuteScrolling(this.LatestElementViewAndApplyButton);
 
             this.LatestElementViewAndApplyButton.Click();
@@ -82,7 +99,7 @@ namespace Tests.Pages
         public void ValidateAllLinksContainText(string text)
         {
             //Arrange
-            var articles = this.SearchResult.FindElements(By.XPath(".//article"));
+            var articles = base.FindElementsByXPath(".//article");
 
             //Act
             var allArticlesContainKeyword = articles.All(article =>

@@ -16,6 +16,8 @@ namespace Tests.Pages
                 TimeSpan.FromSeconds(30));
         }
 
+        protected static bool AreCookiesAccepted { get; set; } = false;
+
         internal IWebElement AcceptCookieButton => this.FindElementById("onetrust-accept-btn-handler");
 
         private IWebElement WaitForElement(By by) => this._wait.Until(driver => driver.FindElement(by));
@@ -40,10 +42,12 @@ namespace Tests.Pages
         public void WaitForAcceptingCookies()
         {
             var wait = new WebDriverWait(this.Driver ?? throw new ArgumentNullException("Web driver has not been created"),
-                TimeSpan.FromSeconds(20));
-            var acceptButton = wait.Until(driver => this.AcceptCookieButton.Displayed ? this.AcceptCookieButton : null);
+                TimeSpan.FromSeconds(5));
 
+            var acceptButton = wait.Until(driver => this.AcceptCookieButton.Displayed ? this.AcceptCookieButton : null);
             acceptButton?.Click();
+
+            AreCookiesAccepted = true;
         }
 
         public void ExecuteScrolling(IWebElement? webElement)

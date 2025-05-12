@@ -20,7 +20,10 @@ namespace Tests.Pages
 
         public void StartDownloading()
         {
-            base.WaitForAcceptingCookies();
+            if (!AreCookiesAccepted)
+            {
+                base.WaitForAcceptingCookies();
+            }
 
             base.ExecuteScrolling(this.Download);
 
