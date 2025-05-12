@@ -44,7 +44,7 @@ namespace TestProject1.Tests
             this._aboutPage.StartDownloading();
 
             string expectedFileName = "EPAM_Corporate_Overview_Q4FY-2024.pdf";
-            string fullFilePath = Path.Combine(DownloadsPath ?? string.Empty, expectedFileName);
+            string fullFilePath = Path.Combine(base.DownloadsPath ?? string.Empty, expectedFileName);
 
             if (File.Exists(fullFilePath))
             {

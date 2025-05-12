@@ -2,7 +2,6 @@
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
-using Serilog;
 
 namespace TestProject1.Core.Drivers
 {
@@ -18,7 +17,6 @@ namespace TestProject1.Core.Drivers
                 case "chrome":
                     var chromeOptions = new ChromeOptions();
 
-
                     if (!string.IsNullOrEmpty(downloadsPath))
                     {
                         chromeOptions.AddUserProfilePreference("download.default_directory", downloadsPath);
@@ -27,8 +25,6 @@ namespace TestProject1.Core.Drivers
                     }
 
                     var chromeDriver = new ChromeDriver(chromeOptions);
-
-                    Log.Information("Chrome web driver has been created");
 
                     return chromeDriver;
 
@@ -50,8 +46,6 @@ namespace TestProject1.Core.Drivers
 
                     var firefoxDriver = new FirefoxDriver(firefoxOptions);
 
-                    Log.Information("Firefox web driver has been created");
-
                     return firefoxDriver;
 
                 case "edge":
@@ -64,8 +58,6 @@ namespace TestProject1.Core.Drivers
                         edgeOptions.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
                     }
                     var edgeDriver = new EdgeDriver(edgeOptions);
-
-                    Log.Information("Edge web driver has been created");
 
                     return edgeDriver;
 

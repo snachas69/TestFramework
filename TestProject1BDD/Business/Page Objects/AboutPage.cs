@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using Serilog;
 
 namespace Tests.Pages
 {
@@ -7,7 +6,6 @@ namespace Tests.Pages
     {
         public AboutPage(IWebDriver? driver) : base(driver)
         {
-            Log.Information("About page has been created");
         }
 
         //Locators
@@ -18,31 +16,19 @@ namespace Tests.Pages
 
         //Public Methods
 
+        public void NavigateToAbout() => this.AboutLink.Click();
+
         public void StartDownloading()
         {
-            Log.Information("[AboutPage] Navigating to About page and initiating download.");
-
-            this.AboutLink.Click();
-
-            Log.Information("[AboutPage] Clicked About link.");
-
             base.WaitForAcceptingCookies();
-
-            Log.Information("[AboutPage] Checked for cookie acceptance.");
 
             base.ExecuteScrolling(this.Download);
 
-            Log.Information("[AboutPage] Scrolled to download link.");
-
             this.Download.Click();
-
-            Log.Information("[AboutPage] Clicked download link.");
         }
 
         public bool WaitUntilFileExists(string filePath, TimeSpan timeout)
         {
-            Log.Information($"[AboutPage] Waiting for file to exist: {filePath}");
-
             var waitUntil = DateTime.Now + timeout;
 
             while (DateTime.Now < waitUntil)
@@ -51,8 +37,6 @@ namespace Tests.Pages
                 {
                     return true;
                 }
-
-                Log.Information("[AboutPage] Timeout reached. File not found.");
 
                 Thread.Sleep(500);
             }
@@ -64,14 +48,8 @@ namespace Tests.Pages
 
         public void ValidateTheFileHasBeenDownloaded(string fullFilePath, string expectedFileName)
         {
-            Log.Information($"[AboutPage] Validating download of file: {expectedFileName}");
-
             //Act
             bool isDownloaded = this.WaitUntilFileExists(fullFilePath, TimeSpan.FromSeconds(30));
-
-            Log.Information(isDownloaded
-                ? $"[AboutPage] File '{expectedFileName}' downloaded successfully."
-                : $"[AboutPage] File '{expectedFileName}' was NOT downloaded in time.");
 
             //Assert
             Assert.That(isDownloaded, Is.True, $"File \'{expectedFileName}\' was not downloaded within the expected time.");

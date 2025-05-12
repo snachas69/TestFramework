@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using Serilog;
 
 namespace Tests.Pages
 {
@@ -8,7 +7,6 @@ namespace Tests.Pages
     {
         public InsightPage(IWebDriver? driver) : base(driver)
         {
-            Log.Information("Insight page has been created");
         }
 
         //Locators
@@ -25,25 +23,23 @@ namespace Tests.Pages
 
         //Public Methods
 
+        public void NavigateToInsightPage() => this.InsightLink.Click();
+
         public void SwipeCarouselTimes(int times)
         {
-            this.InsightLink.Click();
-
-            base.ExecuteScrolling(this.NextCarouselButton);
+            this.ExecuteScrolling(this.NextCarouselButton);
 
             for (int i = 0; i < times; i++)
             {
-                Log.Information($"[InsightPage] Clicking next on carousel: {i + 1}/{times}");
-
                 this.NextCarouselButton.Click();
             }
         }
 
         public bool CompareTitles()
         {
-            var wait = new WebDriverWait(this.Driver ?? throw new NullReferenceException("Web driver has not been created"), 
+            var wait = new WebDriverWait(this.Driver ?? throw new NullReferenceException("Web driver has not been created"),
                 TimeSpan.FromSeconds(20));
-            
+
             wait.Until(driver =>
             {
                 try
@@ -52,26 +48,21 @@ namespace Tests.Pages
                 }
                 catch (StaleElementReferenceException)
                 {
-                    Log.Information("[InsightPage] Caught StaleElementReferenceException, retrying...");
                     return false;
                 }
             });
 
             string slideTitle = this.SlideTitle.Text.Trim();
 
-            Log.Information($"[InsightPage] Slide title captured: \"{slideTitle}\"");
-
             this.ReadMoreButton.Click();
 
             string articleTitle = this.ArticleTitle.Text.Trim();
 
-            Log.Information($"[InsightPage] Article title captured: \"{articleTitle}\"");
-
             return slideTitle.Equals(articleTitle);
         }
 
-        //Validate
-        
+        //Validating methods
+
         public void ValidateTitleOfArticleMatchesTitleOfCarousel()
         {
             //Act
